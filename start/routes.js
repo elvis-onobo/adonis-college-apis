@@ -20,6 +20,7 @@ Route.get('/', () => {
 	return { greeting: 'Hello world in JSON' }
 })
 
+// middlewares: admin, student, instructor, hod
 Route.post('/signup', 'UserController.signup')
 Route.post('/login', 'UserController.login')
 Route.group(() => {
