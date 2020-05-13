@@ -13,7 +13,7 @@ class Hod {
 		const user = await auth.getUser()
 
 		if (!user.role_id || user.role_id !== 4)
-			throw new InvalidAccessException()
+			throw new Error('You\'re not permitted to access this route') //InvalidAccessException()
 		// call next to advance the request
 		await next()
 	}

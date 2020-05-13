@@ -1,8 +1,10 @@
 'use strict'
 
 const Department = use('App/Models/Department')
+const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
+
 
 class UserController {
 	// reusable methods
@@ -112,6 +114,27 @@ class UserController {
 			return response.status(400).json({
 				status: 'error',
 				message: 'Failed to create department.'
+			})
+		}
+	}
+
+	// admin can add a user as instructor in a department
+	async instructor({ request, response }) {
+		// data from the department form
+		const data = request.only(['user_id', 'department_id'])
+
+		try {
+			// save department in the db
+			const result = await Instructor.create(data)
+
+			return response.json({
+				status: 'success',
+				data: result
+			})
+		} catch (error) {
+			return response.status(400).json({
+				status: 'error',
+				message: 'Failed to log user as instructor.'
 			})
 		}
 	}
