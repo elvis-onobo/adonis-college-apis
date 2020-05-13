@@ -5,6 +5,21 @@ const Course = use('App/Models/Course')
 const User = use('App/Models/User')
 
 class UserController {
+	// reusable methods
+	sendError(errorMessage) {
+		return response.status(400).json({
+			status: 'error',
+			message: errorMessage
+		})
+	}
+
+	sendSuccess(responseData) {
+		return response.json({
+			status: 'success',
+			data: responseData
+		})
+	}
+
 	// signs up the user
 	async signup({ request, auth, response }) {
 		// get data from form
@@ -20,6 +35,7 @@ class UserController {
 				status: 'success',
 				data: token
 			})
+			// this.sendSuccess(token)
 		} catch (error) {
 			return response.status(400).json({
 				status: 'error',
@@ -49,7 +65,7 @@ class UserController {
 		}
 	}
 
-	// admin can update a user to student(2) or instructor(3)
+	// admin can update a user to student(2), instructor(3) or HOD(4)
 	async updateUser({ params, request, response }) {
 		try {
 			const { id } = params
@@ -107,6 +123,40 @@ class UserController {
 			return response.status(400).json({
 				status: 'error',
 				message: 'Failed to create department.'
+			})
+		}
+	}
+
+	// admin can get all users
+	async getUsers({ response }) {
+		try {
+			const users = await User.query().paginate(20)
+
+			return response.json({
+				status: 'success',
+				data: users
+			})
+		} catch (error) {
+			return response.status(400).json({
+				status: 'error',
+				message: 'Could not fetch users.'
+			})
+		}
+	}
+
+	// admin can fetch one user
+	async getOneUser({ response }) {
+		try {
+			const users = await User.query().paginate(20)
+
+			return response.json({
+				status: 'success',
+				data: users
+			})
+		} catch (error) {
+			return response.status(400).json({
+				status: 'error',
+				message: 'Could not fetch users.'
 			})
 		}
 	}
