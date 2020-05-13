@@ -19,10 +19,12 @@ const Route = use('Route')
 Route.get('/', () => {
 	return { greeting: 'Hello world in JSON' }
 })
-
 // middlewares: admin, student, instructor, hod
+// student(2), instructor(3) or HOD(4)
 Route.post('/signup', 'UserController.signup')
 Route.post('/login', 'UserController.login')
+Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
+
 Route.group(() => {
 	Route.post('/update-user/:id', 'UserController.updateUser')
 	Route.post('/department', 'UserController.department')
@@ -31,3 +33,9 @@ Route.group(() => {
 	Route.get('/users/:id', 'UserController.getOneUser')
 	Route.delete('/users/:id', 'UserController.deleteUser')
 }).prefix('admin').middleware(['auth:jwt', 'admin'])
+
+Route.group(() => {
+	Route.post('/course', 'StudentController.addCourse')
+	Route.get('/courses/:id', 'StudentController.getCourses')
+	Route.delete('/course/:id', 'StudentController.destroy')
+}).prefix('student').middleware(['auth:jwt', 'student'])

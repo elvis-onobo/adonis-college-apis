@@ -65,6 +65,16 @@ class UserController {
 		}
 	}
 
+	// users can view their profile
+	async profile({ auth, params, response }) {
+		if (auth.user.id !== Number(params.id)) {
+			return response.json({ status: 'You cannot view another user\'s profile' })
+		}
+		return response.json({
+			data: auth.user
+		})
+	}
+
 	// admin can update a user to student(2), instructor(3) or HOD(4)
 	async updateUser({ params, request, response }) {
 		try {
@@ -128,7 +138,7 @@ class UserController {
 	}
 
 	// admin can get all users
-	async getUsers({ response }) {
+	async getAllUsers({ response }) {
 		try {
 			const users = await User.query().paginate(20)
 
