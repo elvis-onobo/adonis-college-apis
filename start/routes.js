@@ -27,4 +27,5 @@ Route.group(() => {
 	Route.post('/department', 'UserController.department')
 	Route.post('/course', 'UserController.course')
 	Route.get('/users', 'UserController.getUsers')
+	Route.get('/users/:id', 'UserController.getOneUser')
 }).prefix('admin').middleware(['auth:jwt'])

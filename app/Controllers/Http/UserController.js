@@ -145,18 +145,39 @@ class UserController {
 	}
 
 	// admin can fetch one user
-	async getOneUser({ response }) {
+	async getOneUser({ params, response }) {
 		try {
-			const users = await User.query().paginate(20)
+			const { id } = params
+			const user = await User.find(id)
 
 			return response.json({
 				status: 'success',
-				data: users
+				data: user
 			})
 		} catch (error) {
 			return response.status(400).json({
 				status: 'error',
-				message: 'Could not fetch users.'
+				message: 'User not found.'
+			})
+		}
+	}
+
+	// delete a user
+	async deleteUser() {
+		try {
+			const { id } = params
+			const user = await User.find(id)
+
+			await user.delete()
+
+			return response.json({
+				status: 'success',
+				data: user
+			})
+		} catch (error) {
+			return response.status(400).json({
+				status: 'error',
+				message: 'Could not delete user'
 			})
 		}
 	}
