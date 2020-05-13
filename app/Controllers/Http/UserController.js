@@ -163,7 +163,7 @@ class UserController {
 	}
 
 	// delete a user
-	async deleteUser() {
+	async deleteUser({ params, response }) {
 		try {
 			const { id } = params
 			const user = await User.find(id)
@@ -172,12 +172,11 @@ class UserController {
 
 			return response.json({
 				status: 'success',
-				data: user
 			})
 		} catch (error) {
 			return response.status(400).json({
 				status: 'error',
-				message: 'Could not delete user'
+				message: 'User not found'
 			})
 		}
 	}
