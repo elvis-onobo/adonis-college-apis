@@ -32,7 +32,6 @@ class HodController {
 				data: course
 			})
 		} catch (error) {
-			return error.message
 			return response.status(400).json({
 				status: 'error',
 				message: 'Failed to add instructor to course.'
@@ -40,6 +39,7 @@ class HodController {
 		}
 	}
 
+	// delete an instructor from the dept
 	async destroyInstructor({ params, response }) {
 		try {
 			const { id } = params
