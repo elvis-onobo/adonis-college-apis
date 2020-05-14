@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Student extends Model {
+	users() {
+		return this.hasMany('App/Models/User')
+	}
 }
 
 module.exports = Student

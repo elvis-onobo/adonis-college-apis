@@ -26,7 +26,7 @@ Route.post('/login', 'UserController.login')
 Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
 
 Route.group(() => {
-	Route.post('/update-user/:id', 'UserController.updateUser')
+	Route.put('/update-user/:id', 'UserController.updateUser')
 	Route.post('/department', 'UserController.department')
 	Route.post('/instructor', 'UserController.instructor')
 	Route.post('/course', 'UserController.course')
@@ -42,7 +42,7 @@ Route.group(() => {
 }).prefix('student').middleware(['auth:jwt', 'student'])
 
 Route.group(() => {
-	Route.post('/course/:id', 'HodController.courseIntructor')
+	Route.put('/course/:id', 'HodController.courseIntructor')
 	Route.delete('/instructor/:id', 'HodController.destroyInstructor')
 }).prefix('hod').middleware(['auth:jwt', 'hod'])
 

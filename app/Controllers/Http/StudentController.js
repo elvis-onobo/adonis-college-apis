@@ -37,6 +37,7 @@ class StudentController {
 				.where('student_id', id)
 				.innerJoin('courses', 'students_courses.course_id', 'courses.id')
 				.select('course_title')
+				.fetch()
 
 			return response.json({
 				status: 'success',
