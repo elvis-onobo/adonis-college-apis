@@ -12,20 +12,26 @@ class HodController {
 		try {
 			const { id } = params //course ID
 
-			// check if the HOD belongs to that department from the instructors table
-			const hodId = await Database
-				.table('instructors')
-				.where('user_id', auth.user.id)
-				.first()
+			// check if the HOD and course are from same department
+			let hodObj = await Instructor.findBy('user_id', auth.user.id)
+			const courseObj = await Course.find(id)
 
-			if (auth.user.id !== Number(hodId.user_id)) {
+			if (Number(hodObj.department_id) !== Number(courseObj.department_id)) {
 				return response.json({ status: 'You can\'t manipulate another department' })
 			}
 
-			const course = await Database
-				.table('courses')
-				.where('id', id)
-				.update({ instructor_id: request.input('instructor') })
+			// check if the user is actually an instructor
+			const user = await User.find(request.input('instructor'))
+
+			if (Number(user.role_id) !== 3 && Number(user.role_id) !== 4) {
+				return response.json({ status: 'This user is not an instructor' })
+			}
+
+			const course = Course.find(id)
+			// update the field
+			course.instructor_id = request.input('instructor')
+
+			course.save
 
 			return response.json({
 				status: 'success',
@@ -40,18 +46,27 @@ class HodController {
 	}
 
 	// delete an instructor from the dept
-	async destroyInstructor({ params, response }) {
+	async destroyInstructor({ auth, params, response }) {
 		try {
-			const { id } = params
-			const user = await Instructor
-				.query()
-				.where('user_id', id)
-				.delete()
+			const { id } = params //instructor ID
+
+			// HOD and Instructor must be in same dept
+			const hodObj = await Instructor.findBy('user_id', auth.user.id)
+			const InstructorObj = await Instructor.findBy('user_id', id)
+
+			if (Number(hodObj.department_id) !== Number(InstructorObj.department_id)) {
+				return response.json({ status: 'Connot delete instructor in another department' })
+			}
+
+			const user = await Instructor.findBy('user_id', id)
+
+			user.delete()
 
 			return response.json({
 				status: 'success',
 			})
 		} catch (error) {
+			return error.message
 			return response.status(400).json({
 				status: 'error',
 				message: 'User not found'

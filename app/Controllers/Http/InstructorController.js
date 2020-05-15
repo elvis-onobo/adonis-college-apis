@@ -12,10 +12,7 @@ class InstructorController {
 				return response.json({ status: 'You can only see courses assigned to you' })
 			}
 
-			const users = await Course
-				.query()
-				.where('instructor_id', id)
-				.fetch()
+			const users = await Course.findBy('instructor_id', id)
 
 			return response.json({
 				status: 'success',

@@ -82,9 +82,12 @@ class UserController {
 		try {
 			const { id } = params
 
-			await User.query()
-				.where('id', id)
-				.update({ role_id: request.input('role') })
+			const user = await User.find(id)
+
+			// update user role
+			user.role_id = request.input('role')
+
+			user.save()
 
 			return response.json({
 				status: 'success',

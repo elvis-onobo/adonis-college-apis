@@ -1,7 +1,7 @@
 'use strict'
 
+const StudentsCourse = use('App/Models/StudentsCourse')
 const Department = use('App/Models/Department')
-const Database = use('Database')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
 
@@ -12,9 +12,7 @@ class StudentController {
 
 		try {
 			// save to db
-			const course = await Database
-				.table('students_courses')
-				.insert(data)
+			const course = await StudentsCourse.create(data)
 
 			return response.status(200).json({
 				status: 'course added',
@@ -32,12 +30,9 @@ class StudentController {
 		try {
 			const { id } = params
 
-			const courses = await Database
-				.table('students_courses')
-				.where('student_id', id)
-				.innerJoin('courses', 'students_courses.course_id', 'courses.id')
-				.select('course_title')
-				.fetch()
+			const courses = await User.find(id)
+
+			return courses.courses().fetch()
 
 			return response.json({
 				status: 'success',
@@ -55,10 +50,9 @@ class StudentController {
 	async destroy({ params, response }) {
 		try {
 			const { id } = params
-			const course = await Database
-				.table('students_courses')
-				.where('id', id)
-				.del()
+			const course = await StudentsCourse.find(id)
+
+			course.delete()
 
 			return response.json({
 				status: 'success',
