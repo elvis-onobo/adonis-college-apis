@@ -77,5 +77,5 @@ class StudentController {
 		}
 	}
 }
-
+// moin
 module.exports = StudentController
