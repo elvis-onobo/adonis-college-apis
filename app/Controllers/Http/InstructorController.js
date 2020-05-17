@@ -6,17 +6,17 @@ const Course = use('App/Models/Course')
 class InstructorController {
 	async courses({ params, auth, response }) {
 		try {
-			const { id } = params
+			const { id } = params //instructorID
 
 			if (auth.user.id !== Number(params.id)) {
 				return response.json({ status: 'You can only see courses assigned to you' })
 			}
 
-			const users = await Course.findBy('instructor_id', id)
+			const courses = await Course.findBy('instructor_id', id)
 
 			return response.json({
 				status: 'success',
-				data: users
+				data: courses
 			})
 		} catch (error) {
 			return response.status(400).json({

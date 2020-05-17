@@ -66,7 +66,6 @@ class HodController {
 				status: 'success',
 			})
 		} catch (error) {
-			return error.message
 			return response.status(400).json({
 				status: 'error',
 				message: 'User not found'

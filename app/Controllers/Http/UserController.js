@@ -4,7 +4,7 @@ const Department = use('App/Models/Department')
 const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
-
+const { validate } = use('Validator')
 
 class UserController {
 	// reusable methods
@@ -24,6 +24,19 @@ class UserController {
 
 	// signs up the user
 	async signup({ request, auth, response }) {
+		const rules = {
+			firstname: 'required|string',
+			lastname: 'required|string',
+			email: 'required|email|unique:users,email',
+			password: 'required'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
 		// get data from form
 		const userData = request.only(['firstname', 'lastname', 'email', 'street', 'role_id', 'state_id', 'password'])
 
@@ -48,6 +61,17 @@ class UserController {
 
 	// logs in a user
 	async login({ request, auth, response }) {
+		const rules = {
+			email: 'required|email',
+			password: 'required'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
 		try {
 			// validate the user credentials and generate JWT token
 			const token = await auth.attempt(
@@ -79,6 +103,16 @@ class UserController {
 
 	// admin can update a user to student(2), instructor(3) or HOD(4)
 	async updateUser({ params, request, response }) {
+		const rules = {
+			role: 'required'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
 		try {
 			const { id } = params
 
@@ -102,6 +136,18 @@ class UserController {
 
 	// admin can create a department
 	async department({ request, response }) {
+		const rules = {
+			colleges_id: 'required|number',
+			dep_label: 'required|string'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
+
 		// data from the department form
 		const depData = request.only(['colleges_id', 'dep_label'])
 
@@ -123,6 +169,18 @@ class UserController {
 
 	// admin can add a user as instructor in a department
 	async instructor({ request, response }) {
+		const rules = {
+			user_id: 'required|number',
+			department_id: 'required|number'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
+
 		// data from the department form
 		const data = request.only(['user_id', 'department_id'])
 
@@ -144,6 +202,17 @@ class UserController {
 
 	//admin can create a course
 	async course({ request, response }) {
+		const rules = {
+			department_id: 'required|number',
+			course_title: 'required|string'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
 		// data from the department form
 		const courseData = request.only(['instructor_id', 'department_id', 'course_title'])
 

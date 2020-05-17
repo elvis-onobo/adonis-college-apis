@@ -8,6 +8,17 @@ const User = use('App/Models/User')
 class StudentController {
 	// add a course
 	async addCourse({ request, response }) {
+		const rules = {
+			student_id: 'required|number',
+			course_id: 'required|number'
+		}
+
+		const validation = await validate(request.all(), rules)
+
+		if (validation.fails()) {
+			return response.json({ message: validation.messages() })
+		}
+
 		const data = request.only(['student_id', 'course_id'])
 
 		try {
@@ -58,6 +69,7 @@ class StudentController {
 				status: 'success',
 			})
 		} catch (error) {
+			return error.message
 			return response.status(400).json({
 				status: 'error',
 				message: 'Unable to delete course'
