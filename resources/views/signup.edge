@@ -2,35 +2,48 @@
 
 @section('main')
 
-<div class="container mt-4">
-		<div class="row justify-content-center" >
-			<form class="">
-				<h1>Welcome to College</h1>
+		<div class="row justify-content-center mt-4">
+			<div class="align-self-center mr-4">
+				<h1 class="display-4">Welcome to College</h1>
 				<h6>Signup to start your journey</h6>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Name</label>
-					<input type="email" class="form-control rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Email address</label>
-					<input type="email" class="form-control rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp">
-					<small id="emailHelp" class="form-text text-muted">We'll gladly share your email with anyone, lol!.</small>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputPassword1">Password</label>
-					<input type="password" class="form-control rounded-0" id="exampleInputPassword1">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputPassword1">Confirm Password</label>
-					<input type="password" class="form-control rounded-0" id="exampleInputPassword1">
-				</div>
-				<div class="form-group form-check">
-					<input type="checkbox" class="form-check-input" id="exampleCheck1">
-					<label class="form-check-label" for="exampleCheck1">Remember me</label>
-				</div>
-				<button type="submit" class="btn btn-primary rounded-0">Submit</button>
-			</form>
+			</div>
+
+			<div class="col-md-4">
+				<form class="card-body" method="post" action="{{ route('signup') }}">
+					{{ csrfField() }}
+					<div class="form-group">
+						<label for="firstname">First Name</label>
+						<input type="text" name="firstname" class="form-control rounded-0">
+					</div>
+
+					<div class="form-group">
+						<label for="lastname">Last Name</label>
+						<input type="text" name="lastname" class="form-control rounded-0">
+					</div>
+
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" name="email" class="form-control rounded-0">
+						<small id="emailHelp" class="form-text text-muted">We'll gladly share your email with anyone, lol!.</small>
+					</div>
+
+					<div class="form-group">
+						<label for="street">Street</label>
+						<input type="text" name="street" class="form-control rounded-0">
+					</div>
+
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" name="password" class="form-control rounded-0" id="exampleInputPassword1">
+					</div>
+
+					<div class="form-group">
+						<label for="confrim_password">Confirm Password</label>
+						<input type="password" name="password_confirmation" class="form-control rounded-0">
+					</div>
+					<button type="submit" class="btn btn-dark rounded-0">Submit</button>
+				</form>
+			</div>
 		</div>
-	</div>
 
 @endsection

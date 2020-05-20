@@ -17,15 +17,14 @@
 const Route = use('Route')
 
 // views
-Route.get('/', ({ view }) => {
-	return view.render('signup')
-})
-Route.on('/login').render('login')
+Route.on('/').render('signup').middleware('guest')
+Route.on('/login').render('login').middleware('guest')
+Route.on('/home').render('home')
 
 // middlewares: admin, student, instructor, hod
 // student(2), instructor(3) or HOD(4)
-Route.post('/signup', 'UserController.signup')
-Route.post('/login', 'UserController.login')
+Route.post('/signup', 'UserController.signup').as('signup')
+Route.post('/login', 'UserController.login').as('login')
 Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
 
 Route.group(() => {

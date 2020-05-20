@@ -4,17 +4,18 @@
 
 <div class="container mt-4">
 		<div class="row justify-content-center" >
-			<form class="">
+			<form class="card-body" method="post" action="{{ route('login') }}">
+				{{ csrfField() }}
 				<h1>Welcome, Login</h1>
 
 				<div class="form-group">
 					<label for="exampleInputEmail1">Email address</label>
-					<input type="email" class="form-control rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp">
+					<input type="email" name="email" class="form-control rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp">
 					<small id="emailHelp" class="form-text text-muted">We'll gladly share your email with anyone, lol!.</small>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">Password</label>
-					<input type="password" class="form-control rounded-0" id="exampleInputPassword1">
+					<input type="password" name="password" class="form-control rounded-0" id="exampleInputPassword1">
 				</div>
 				<div class="form-group form-check">
 					<input type="checkbox" class="form-check-input" id="exampleCheck1">
