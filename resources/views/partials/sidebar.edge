@@ -1,48 +1,48 @@
-<div class="wrapper">
+<div class="wrapper" style="display: flex;width: 100%;">
     <!-- Sidebar -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>Bootstrap Sidebar</h3>
+    <nav id="sidebar" style="width: 250px; position: fixed; left: 0; height: 100vh; z-index: 999; background: #7386D5; color: #fff; transition: all 0.3s;">
+        <div class="card-body sidebar-header">
+				<h3>Hi {{ auth.user.firstname }}</h3>
         </div>
 
-        <ul class="list-unstyled components">
-            <p>Dummy Heading</p>
+        <ul class="card-body list-unstyled components">
+            <p>What Do You Want To Do?</p>
             <li class="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Home</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a href="#">Home 1</a>
+                        <a href="#" class="text-white">Home 1</a>
                     </li>
                     <li>
-										<a href="{{ route('profile', {id: auth.user.id}) }}">Profile</a>
+										<a href="{{ route('profile', {id: auth.user.id}) }}" class="text-white">Profile</a>
                     </li>
                     <li>
-                        <a href="#">Home 3</a>
+                        <a href="#" class="text-white">Home 3</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#">About</a>
+                <a href="#" class="text-white">About</a>
             </li>
             <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Pages</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a href="#">Page 1</a>
+                        <a href="#" class="text-white">Page 1</a>
                     </li>
                     <li>
-                        <a href="#">Page 2</a>
+                        <a href="#" class="text-white">Page 2</a>
                     </li>
                     <li>
-                        <a href="#">Page 3</a>
+                        <a href="#" class="text-white">Page 3</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#">Portfolio</a>
+                <a href="#" class="text-white">Portfolio</a>
             </li>
             <li>
-                <a href="#">Contact</a>
+                <a href="#" class="text-white">Contact</a>
             </li>
         </ul>
 
@@ -54,7 +54,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
 
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                <button type="button" id="sidebarCollapse" class="btn btn-warning">
                     <i class="fas fa-align-left"></i>
                     <span>Toggle Sidebar</span>
                 </button>

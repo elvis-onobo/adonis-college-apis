@@ -4,11 +4,12 @@
 
 @include('partials.sidebar')
 
-<div class="container">
-	<div class="card-body">
-	Username: {{ auth.user.firstname }} {{ auth.user.lastname }}
-	Email: {{ auth.user.email }}
-	Street: {{ auth.user.street ? auth.user.street : el('Not Added')}}
+<div class="row justify-content-center">
+	<div class="col-md-6 card-body">
+		<h3>Your Profile</h3>
+		<p>Username: {{ auth.user.firstname }} {{ auth.user.lastname }}</p>
+		<p>Email: {{ auth.user.email }}</p>
+		<p>Street: {{ auth.user.street ? auth.user.street : el('Not Added')}}</p>
 	</div>
 </div>
 

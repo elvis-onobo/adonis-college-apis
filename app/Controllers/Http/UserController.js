@@ -4,7 +4,7 @@ const Department = use('App/Models/Department')
 const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
-const { validate } = use('Validator')
+const { validateAll, validate } = use('Validator')
 const Mail = use('Mail')
 const Hash = use('Hash')
 
@@ -25,7 +25,7 @@ class UserController {
 			password: 'required'
 		}
 
-		const validation = await validate(request.all(), rules)
+		const validation = await validateAll(request.all(), rules)
 
 		if (validation.fails()) {
 			session.withErrors(validation.messages()).flashExcept(['password'])
@@ -80,7 +80,7 @@ class UserController {
 			password: 'required'
 		}
 
-		const validation = await validate(request.all(), rules)
+		const validation = await validateAll(request.all(), rules)
 
 		if (validation.fails()) {
 			session.withErrors(validation.messages()).flashExcept(['password'])

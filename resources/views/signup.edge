@@ -16,32 +16,31 @@
 					<div class="form-group">
 						<label for="firstname">First Name</label>
 						<input type="text" name="firstname" class="form-control rounded-0 {{ hasErrorFor('firstname') ? 'text-danger': '' }}" value="{{ old('firstname', '') }}">
-						{{--  {{ elif('<span class="text-danger">$self</span>', getErrorFor('firstname'), hasErrorFor('firstname')) }}  --}}
+						    {{ elIf('<span class="text-danger">$self</span>', getErrorFor('firstname'), hasErrorFor('firstname')) }}
 					</div>
 
 					<div class="form-group">
 						<label for="lastname">Last Name</label>
 						<input type="text" name="lastname" class="form-control rounded-0 {{ hasErrorFor('lastname') ? 'text-danger': '' }}" value="{{ old('lastname', '') }}">
-						{{--  {{ elif('<span class="text-danger">$self</span>', getErrorFor('lastname'), hasErrorFor('lastname')) }}  --}}
+						{{ elIf('<span class="text-danger">$self</span>', getErrorFor('lastname'), hasErrorFor('lastname')) }}
 					</div>
 
 					<div class="form-group">
 						<label for="email">Email</label>
 						<input type="email" name="email" class="form-control rounded-0 {{ hasErrorFor('firstname') ? 'text-danger': ''}}" value="{{ old('email', '') }}">
 						<small id="emailHelp" class="form-text text-muted">We'll gladly share your email with anyone, lol!.</small>
-						{{--  {{ elif('<span class="text-danger">$self</span>', getErrorFor('lastname'), hasErrorFor('lastname')) }}  --}}
+						{{ elIf('<span class="text-danger">$self</span>', getErrorFor('email'), hasErrorFor('email')) }}
 					</div>
 
 					<div class="form-group">
 						<label for="street">Street</label>
 						<input type="text" name="street" class="form-control rounded-0 {{ hasErrorFor('street') ? 'text-danger': ''}}" value="{{ old('street', '') }}">
-						{{--  {{ elif('<span class="text-danger">$self</span>', getErrorFor('street'), hasErrorFor('street')) }}  --}}
+						{{ elIf('<span class="text-danger">$self</span>', getErrorFor('street'), hasErrorFor('street')) }}
 					</div>
 
 					<div class="form-group">
 						<label for="password">Password</label>
 						<input type="password" name="password" class="form-control rounded-0 {{ hasErrorFor('password') ? 'text-danger': ''}}" id="exampleInputPassword1">
-						{{--  {{ elif('<span class="text-danger">$self</span>', getErrorFor('password'), hasErrorFor('password')) }}  --}}
 					</div>
 
 					<button type="submit" class="btn btn-dark rounded-0">Submit</button>
