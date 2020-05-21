@@ -15,16 +15,12 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
-
-// views
-Route.on('/').render('signup').middleware('guest')
-Route.on('/login').render('login').middleware('guest')
-Route.on('/home').render('home')
-
-// middlewares: admin, student, instructor, hod
-// student(2), instructor(3) or HOD(4)
+// admin(1), student(2), instructor(3) or HOD(4)
+Route.get('/', 'UserController.showSignupForm')
 Route.post('/signup', 'UserController.signup').as('signup')
+Route.get('/login', 'UserController.showLoginPage')
 Route.post('/login', 'UserController.login').as('login')
+Route.get('/home', 'UserController.showHomePage').as('home')
 Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
 
 Route.group(() => {

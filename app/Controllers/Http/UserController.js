@@ -5,36 +5,32 @@ const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
 const { validate } = use('Validator')
+const Mail = use('Mail')
+const Hash = use('Hash')
 
 class UserController {
-	// reusable methods
-	sendError(errorMessage) {
-		return response.status(400).json({
-			status: 'error',
-			message: errorMessage
-		})
+	/*
+	 * @ Signup a user
+	 */
+	showSignupForm({ view }) {
+		return view.render('signup')
 	}
 
-	sendSuccess(responseData) {
-		return response.json({
-			status: 'success',
-			data: responseData
-		})
-	}
-
-	// signs up the user
-	async signup({ request, auth, response }) {
+	async signup({ request, response, session }) {
 		const rules = {
 			firstname: 'required|string',
 			lastname: 'required|string',
 			email: 'required|email|unique:users,email',
-			password: 'required|confirmed'
+			street: 'string',
+			password: 'required'
 		}
 
 		const validation = await validate(request.all(), rules)
 
 		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
+			session.withErrors(validation.messages()).flashExcept(['password'])
+
+			return response.redirect('back')
 		}
 
 		// get data from form
@@ -43,24 +39,42 @@ class UserController {
 		try {
 			// save user in the db
 			const user = await User.create(userData)
-			// if user saved generate token for user
-			const token = await auth.generate(user)
 
-			return response.json({
-				status: 'success',
-				data: token
+			// send confirmation mail
+			// await Mail.send('emails.confirm_email', user.toJSON(), message => {
+			// 	message.to(user.email)
+			// 		.from('elvis@adonis.com')
+			// 		.subject('Confirm Your Email Address')
+			// })
+
+			// display success message
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Registration successful. Please confirm your email'
+				}
 			})
-			// this.sendSuccess(token)
+
+			return response.redirect('back')
 		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to create user'
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Registration failed'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
 
-	// logs in a user
-	async login({ request, auth, response }) {
+	/*
+	 * @ Login user
+	 */
+	showLoginPage({ view }) {
+		return view.render('login')
+	}
+
+	async login({ request, auth, response, session }) {
 		const rules = {
 			email: 'required|email',
 			password: 'required'
@@ -69,26 +83,40 @@ class UserController {
 		const validation = await validate(request.all(), rules)
 
 		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
+			session.withErrors(validation.messages()).flashExcept(['password'])
+
+			return response.redirect('back')
 		}
 
-		try {
-			// validate the user credentials and generate JWT token
-			const token = await auth.attempt(
-				request.input('email'),
-				request.input('password')
-			)
+		const user = await User.query()
+			.where('email', request.input('email'))
+			.first()
 
-			return response.json({
-				status: 'success',
-				data: token
-			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Invalid email or password'
-			})
+		// verify password
+		if (user) {
+			const passwordVerified = await Hash.verify(request.input('password'), user.password)
+
+			if (passwordVerified) {
+				// login user
+				await auth.remember(!!request.input('remember')).login(user)
+
+				return response.route('home')
+			}
 		}
+
+		// error case 
+		session.flash({
+			notification: {
+				type: 'danger',
+				message: 'Could not verify your credentials'
+			}
+		})
+
+		return response.redirect('back')
+	}
+
+	showHomePage({ view }) {
+		return view.render('home')
 	}
 
 	// users can view their profile

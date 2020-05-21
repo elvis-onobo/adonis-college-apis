@@ -1,0 +1,5 @@
+@if(flashMessage('notification'))
+	<div class="notifiaction text-{{ flashMessage('notification.type') }} text-center">
+		{{ flashMessage('notification.message') }}
+	</div>
+@endif
