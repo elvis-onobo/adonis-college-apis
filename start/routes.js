@@ -20,8 +20,8 @@ Route.get('/', 'UserController.showSignupForm')
 Route.post('/signup', 'UserController.signup').as('signup')
 Route.get('/login', 'UserController.showLoginPage')
 Route.post('/login', 'UserController.login').as('login')
-Route.get('/home', 'UserController.showHomePage').as('home')
-Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
+Route.get('/home', 'UserController.showHomePage').as('home').middleware(['auth'])
+Route.get('/profile/:id', 'UserController.profile').as('profile').middleware(['auth'])
 
 Route.group(() => {
 	Route.put('/update-user/:id', 'UserController.updateUser')
@@ -47,3 +47,6 @@ Route.group(() => {
 Route.group(() => {
 	Route.get('/course/:id', 'InstructorController.courses')
 }).prefix('instructor').middleware(['auth:jwt', 'instructor'])
+
+// Logout User
+Route.get('/logout', 'UserController.logoutUser').as('logoutUser')
