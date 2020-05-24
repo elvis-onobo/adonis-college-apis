@@ -1,12 +1,15 @@
 'use strict'
 
+const { validateAll, validate } = use('Validator')
 const Department = use('App/Models/Department')
 const Instructor = use('App/Models/Instructor')
+const College = use('App/Models/College')
 const Course = use('App/Models/Course')
+const State = use('App/Models/State')
 const User = use('App/Models/User')
-const { validateAll, validate } = use('Validator')
-const Mail = use('Mail')
+const Role = use('App/Models/Role')
 const Hash = use('Hash')
+const Mail = use('Mail')
 
 class UserController {
 	/*
@@ -138,10 +141,42 @@ class UserController {
 	// 	})
 	// }
 
-	// admin can update a user to student(2), instructor(3) or HOD(4)
-	async updateUser({ params, request, response }) {
+	/*
+	 * @ Get all users and display in a view
+	 * @ Returns a view or JSON based on the request
+	 */
+	async getAllUsers({ view }) {
+		const users = await User
+			.query()
+			.orderBy('id', 'desc')
+			.paginate()
+
+		return view.render('admin.users', { users: users.toJSON() })
+	}
+
+	/*
+   * @ Get a single user
+	 */
+	async getOneUser({ params, view }) {
+		const { id } = params
+		const user = await User.find(id)
+
+		return view.render('admin.single-user', { user: user.toJSON() })
+	}
+
+	/*
+	 * @ Update a user's role
+	 */
+	async showUpdateRoleForm({ params, view }) {
+		const roles = await Role.all()
+		const user = await User.find(params.id)
+
+		return view.render('admin.update-role', { roles: roles.toJSON(), user: user.toJSON() })
+	}
+
+	async updateUser({ request, response, session, params }) {
 		const rules = {
-			role: 'required'
+			role_id: 'required'
 		}
 
 		const validation = await validate(request.all(), rules)
@@ -150,26 +185,122 @@ class UserController {
 			return response.json({ message: validation.messages() })
 		}
 
-		try {
-			const { id } = params
+		const { id } = params
 
-			const user = await User.find(id)
+		const user = await User.find(id)
 
-			// update user role
-			user.role_id = request.input('role')
+		// update user role
+		user.role_id = request.input('role_id')
 
-			user.save()
-
-			return response.json({
-				status: 'success',
+		if (user.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Role updated!'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to update.'
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Registration failed'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
+
+	/*
+	 * @ Create roles
+	 */
+	showCreateRolesForm({ view }) {
+		return view.render('admin.create-roles')
+	}
+
+	async createRole({ request, session, response }) {
+		const rules = {
+			role: 'required|string'
+		}
+
+		const validation = await validateAll(request.all(), rules)
+
+		if (validation.fails()) {
+			session.withErrors(validation.messages())
+
+			return response.redirect('back')
+		}
+
+		const role = new Role()
+		role.role_label = request.input('role')
+
+		if (await role.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Role Created!'
+				}
+			})
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Failed to create role!'
+				}
+			})
+			return response.redirect('back')
+		}
+	}
+
+	/*
+	 * @ Create a college 
+	 */
+	async showCreateCollegeForm({ view }) {
+		const states = await State.all()
+
+		return view.render('admin.create-college', { states: states.toJSON() })
+	}
+
+	async createCollege({ request, session, auth, response }) {
+		const rules = {
+			college: 'required|string',
+			street: 'required|string'
+		}
+
+		const validation = await validateAll(request.all(), rules)
+
+		if (validation.fails()) {
+			session.withErrors(validation.messages()).flash()
+
+			return response.redirect('back')
+		}
+
+		const college = new College()
+		college.colleges_label = request.input('college')
+		college.street = request.input('street')
+		college.state_id = request.input('state')
+		college.created_by = auth.user.id
+
+		if (await college.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'College Created!'
+				}
+			})
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Failed to create college!'
+				}
+			})
+			return response.redirect('back')
+		}
+	}
+
 
 	// admin can create a department
 	async department({ request, response }) {
@@ -192,15 +323,21 @@ class UserController {
 			// save department in the db
 			const dep = await Department.create(depData)
 
-			return response.json({
-				status: 'success',
-				data: dep
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Role updated!'
+				}
 			})
+			return response.redirect('back')
 		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to create department.'
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Role updated!'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
 
@@ -265,41 +402,6 @@ class UserController {
 			return response.status(400).json({
 				status: 'error',
 				message: 'Failed to create department.'
-			})
-		}
-	}
-
-	// admin can get all users
-	async getAllUsers({ response }) {
-		try {
-			const users = await User.query().paginate(20)
-
-			return response.json({
-				status: 'success',
-				data: users
-			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Could not fetch users.'
-			})
-		}
-	}
-
-	// admin can fetch one user
-	async getOneUser({ params, response }) {
-		try {
-			const { id } = params
-			const user = await User.find(id)
-
-			return response.json({
-				status: 'success',
-				data: user
-			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'User not found.'
 			})
 		}
 	}
