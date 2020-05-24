@@ -302,75 +302,49 @@ class UserController {
 	}
 
 
-	// admin can create a department
-	async department({ request, response }) {
-		const rules = {
-			colleges_id: 'required|number',
-			dep_label: 'required|string'
-		}
+	/*
+	 * @ Add user as instructor in a department
+	 */
+	async showAddUserAsIntructorForm({ view, params }) {
+		const user = await User.find(params.id)
+		const deps = await Department.all()
 
-		const validation = await validate(request.all(), rules)
-
-		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
-		}
-
-
-		// data from the department form
-		const depData = request.only(['colleges_id', 'dep_label'])
-
-		try {
-			// save department in the db
-			const dep = await Department.create(depData)
-
-			session.flash({
-				notification: {
-					type: 'success',
-					message: 'Role updated!'
-				}
-			})
-			return response.redirect('back')
-		} catch (error) {
-			session.flash({
-				notification: {
-					type: 'success',
-					message: 'Role updated!'
-				}
-			})
-			return response.redirect('back')
-		}
+		return view.render('admin.add-instructor', { deps: deps.toJSON(), user: user.toJSON() })
 	}
 
-	// admin can add a user as instructor in a department
-	async instructor({ request, response }) {
+	async instructor({ request, response, params, session }) {
 		const rules = {
-			user_id: 'required|number',
 			department_id: 'required|number'
 		}
 
-		const validation = await validate(request.all(), rules)
+		const validation = await validateAll(request.all(), rules)
 
 		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
+			session.withErrors(validation.messages()).flash()
+
+			return response.redirect('back')
 		}
 
+		const ins = new Instructor()
+		ins.user_id = params.id
+		ins.department_id = request.input(['department_id'])
 
-		// data from the department form
-		const data = request.only(['user_id', 'department_id'])
-
-		try {
-			// save department in the db
-			const result = await Instructor.create(data)
-
-			return response.json({
-				status: 'success',
-				data: result
+		if (await ins.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Instructor added'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to log user as instructor.'
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Instructor not added'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
 
@@ -407,21 +381,26 @@ class UserController {
 	}
 
 	// delete a user
-	async deleteUser({ params, response }) {
-		try {
-			const { id } = params
-			const user = await User.find(id)
+	async deleteUser({ params, session, response }) {
+		const { id } = params
+		const user = await User.find(id)
 
-			await user.delete()
-
-			return response.json({
-				status: 'success',
+		if (await user.delete()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'User deleted!'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'User not found'
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'User could not be deleted!'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
 

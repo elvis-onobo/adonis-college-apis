@@ -39,8 +39,7 @@
 				<td>
 					<a href="{{ route('single-user', { id: user.id }) }}" class="btn btn-primary text-white rounded-0">Details</a>
 				</td>
-					<td><a class="btn btn-primary text-white rounded-0">Role</a></td>
-					<td><a class="btn btn-danger text-white rounded-0">Delete</a></td>
+				<td><a href="{{ route('delete-user', { id: user.id }) }}" class="btn btn-danger text-white rounded-0">Delete</a></td>
 				</tr>
 			@endeach
 		</tbody>

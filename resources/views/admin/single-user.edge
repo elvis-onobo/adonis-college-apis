@@ -24,7 +24,7 @@
 		</p>
 		<a href="{{ route('update-role-form', { id: user.id }) }}" class="btn btn-dark text-white rounded-0">Change Role</a>
 		@if(user.role_id===3 || user.role_id===4)
-			<a class="btn btn-dark text-white rounded-0">Add As Instructor</a>
+			<a href="{{ route('add-user-as-instructor-form', { id: user.id }) }}" class="btn btn-dark text-white rounded-0">Add As Add Instructor To Department</a>
     @endif
 	</p>
 
