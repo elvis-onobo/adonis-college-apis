@@ -348,35 +348,49 @@ class UserController {
 		}
 	}
 
-	//admin can create a course
-	async course({ request, response }) {
+	/*
+	 * @ Assign an instructor to a course
+	 */
+	async showAddInstructorToCourseForm({ view, params }) {
+		const user = await User.find(params.id)
+		const courses = await Course.all()
+
+		return view.render('admin.add-instructor-course', { courses: courses.toJSON(), user: user.toJSON() })
+	}
+
+	async course({ request, response, params, session }) {
 		const rules = {
-			department_id: 'required|number',
-			course_title: 'required|string'
+			course_id: 'required|string'
 		}
 
-		const validation = await validate(request.all(), rules)
+		const validation = await validateAll(request.all(), rules)
 
 		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
+			session.withErrors(validation.messages()).flash()
+
+			return response.redirect('back')
 		}
 
-		// data from the department form
-		const courseData = request.only(['instructor_id', 'department_id', 'course_title'])
+		const course = await Course.find(request.input('course_id'))
 
-		try {
-			// save department in the db
-			const course = await Course.create(courseData)
+		course.instructor_id = params.id
 
-			return response.json({
-				status: 'success',
-				data: course
+		if (course.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Instructor assigned to course'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to create department.'
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Instructor not assigned to course'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
 

@@ -35,7 +35,8 @@ Route.group(() => {
 	Route.post('/department', 'UserController.department')
 	Route.get('/instructor/:id', 'UserController.showAddUserAsIntructorForm').as('add-user-as-instructor-form')
 	Route.post('/instructors/:id', 'UserController.instructor').as('add-instructor-to-dep')
-	Route.post('/course', 'UserController.course')
+	Route.get('/course/:id', 'UserController.showAddInstructorToCourseForm').as('add-instructor-to-course-form')
+	Route.post('/courses/:id', 'UserController.course').as('add-instructor-to-course')
 	Route.get('/users/delete/:id', 'UserController.deleteUser').as('delete-user')
 }).prefix('admin').middleware(['auth', 'admin'])
 
