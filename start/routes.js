@@ -24,14 +24,19 @@ Route.get('/home', 'UserController.showHomePage').as('home').middleware(['auth']
 Route.get('/profile/:id', 'UserController.profile').as('profile').middleware(['auth'])
 
 Route.group(() => {
-	Route.put('/update-user/:id', 'UserController.updateUser')
+	Route.get('/users', 'UserController.getAllUsers').as('users')
+	Route.get('/users/:id', 'UserController.getOneUser').as('single-user')
+	Route.get('/roles', 'UserController.showCreateRolesForm').as('create-role-form')
+	Route.post('/roles', 'UserController.createRole').as('create-role')
+	Route.get('/users/update/:id', 'UserController.showUpdateRoleForm').as('update-role-form')
+	Route.post('/update-user/:id', 'UserController.updateUser').as('update-role')
+	Route.get('/college', 'UserController.showCreateCollegeForm').as('create-college-form')
+	Route.post('/college', 'UserController.createCollege').as('create-college')
 	Route.post('/department', 'UserController.department')
 	Route.post('/instructor', 'UserController.instructor')
 	Route.post('/course', 'UserController.course')
-	Route.get('/users', 'UserController.getAllUsers')
-	Route.get('/users/:id', 'UserController.getOneUser')
 	Route.delete('/users/:id', 'UserController.deleteUser')
-}).prefix('admin').middleware(['auth:jwt', 'admin'])
+}).prefix('admin').middleware(['auth', 'admin'])
 
 Route.group(() => {
 	Route.post('/course', 'StudentController.addCourse')
