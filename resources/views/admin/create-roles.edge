@@ -1,0 +1,28 @@
+@layout('layouts.main')
+
+@section('main')
+
+@include('partials.sidebar')
+
+<div class="container mt-4">
+		<div class="row justify-content-center" >
+			<div class="col-md-7">
+				<form class="card-body" method="post" action="{{ route('create-role') }}">
+					{{ csrfField() }}
+					<p>Create User Roles</p>
+					 
+					@include('includes.notification')
+
+					<div class="form-group">
+						<label for="">Role</label>
+						<input type="text" name="role" class="form-control rounded-0" value="{{ old('role', '') }}">
+						{{ elIf('<span class="text-danger">$self</span>', getErrorFor('role'), hasErrorFor('role')) }}
+					</div>
+
+					<button type="submit" class="btn btn-dark rounded-0">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+@endsection

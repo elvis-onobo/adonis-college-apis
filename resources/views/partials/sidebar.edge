@@ -7,22 +7,28 @@
 
         <ul class="card-body list-unstyled components">
             <p>What Do You Want To Do?</p>
-            <li class="active">
+						<li class="active">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Home</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a href="#" class="text-white">Home 1</a>
+											<a href="{{ route('create-role-form') }}" class="text-white">Create Roles</a>
+										</li>
+										<li>
+											<a href="{{ route('create-college-form') }}" class="text-white">Create College</a>
+										</li>
+										<li>
+											<a href="{{ route('users') }}" class="text-white">All Users</a>
                     </li>
                     <li>
-										<a href="{{ route('profile', {id: auth.user.id}) }}" class="text-white">Profile</a>
+										<a href="" class="text-white">Departments</a>
                     </li>
                     <li>
-                        <a href="#" class="text-white">Home 3</a>
+                        <a href="#" class="text-white">Courses</a>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a href="#" class="text-white">About</a>
+						</li>
+			      <li>
+              <a href="" class="text-white">Roles</a>
             </li>
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Pages</a>

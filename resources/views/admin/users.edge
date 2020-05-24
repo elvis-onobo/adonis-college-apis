@@ -1,0 +1,51 @@
+@layout('layouts.main')
+
+@section('main')
+
+@include('partials.sidebar')
+
+<div class="row justify-content-center">
+	<div class="col-md-7 card-body">
+		@if(users.data.length === 1)
+			<p>You there are no other registered users</p>
+		@endif
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">First Name</th>
+				<th scope="col">Last Name</th>
+				<th scope="col">Email</th>
+				<th scope="col">Role</th>
+			</tr>
+		</thead>
+		<tbody>
+			@each(user in users.data)
+				<tr>
+					<td>{{ user.firstname }}</td>
+					<td>{{ user.lastname }}</td>
+					<td>{{ user.email }}</td>
+					@if(user.role_id === 0)
+						<td>Unspecified</td>
+					@elseif(user.role_id === 1)
+						<td>Admin</td>
+					@elseif(user.role_id === 2)
+						<td>Student</td>
+					@elseif(user.role_id === 3)
+						<td>Instructor</td>
+					@elseif(user.role_id === 4)
+						<td>HOD</td>
+					@endif
+				<td>
+					<a href="{{ route('single-user', { id: user.id }) }}" class="btn btn-primary text-white rounded-0">Details</a>
+				</td>
+					<td><a class="btn btn-primary text-white rounded-0">Role</a></td>
+					<td><a class="btn btn-danger text-white rounded-0">Delete</a></td>
+				</tr>
+			@endeach
+		</tbody>
+	</table>
+</div>
+
+</div>
+@endsection

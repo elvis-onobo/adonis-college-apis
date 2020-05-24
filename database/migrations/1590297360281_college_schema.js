@@ -9,7 +9,8 @@ class CollegeSchema extends Schema {
 			table.increments()
 			table.string('colleges_label', 50).notNullable()
 			table.string('street', 150).notNullable()
-			table.integer('state_id')
+			table.integer('state_id').nullable()
+			table.integer('created_by').notNullable()
 			table.timestamps()
 		})
 	}

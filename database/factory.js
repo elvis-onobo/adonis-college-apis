@@ -26,3 +26,23 @@ Factory.blueprint('App/Models/User', async (faker) => {
 		password: await Hash.make('password')
 	}
 })
+
+Factory.blueprint('App/Models/State', async (faker) => {
+	return {
+		state_label: faker.state({ full: true })
+	}
+})
+
+Factory.blueprint('App/Models/Course', async (faker) => {
+	return {
+		department_id: faker.integer({ min: 1, max: 4 }),
+		course_title: faker.profession()
+	}
+})
+
+Factory.blueprint('App/Models/Department', async (faker) => {
+	return {
+		colleges_id: faker.integer({ min: 1, max: 2 }),
+		dep_label: faker.profession()
+	}
+})
