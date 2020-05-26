@@ -1,0 +1,32 @@
+@layout('layouts.main')
+
+@section('main')
+
+@include('partials.sidebar')
+
+<div class="row justify-content-center">
+	<div class="col-md-6 card-body border border-dark">
+		<form class="card-body" method="post" action="{{ route('add-course', {id: auth.user.id}) }}">
+			{{ csrfField() }}				
+			@include('includes.notification')
+
+			<div class="form-group">
+				<label for="exampleInputEmail1">You are</label>
+				<input type="text" name="name" class="form-control rounded-0" id="exampleInputEmail1" value="{{auth.user.firstname}} {{auth.user.lastname}}" readonly>
+			</div>
+
+			<div class="form-group">
+				<label for="exampleInputEmail1">Choose a Course</label>
+				<select class="form-control rounded-0" name="course_id">
+					@each(course in courses)
+						<option value="{{ course.id }}">{{ course.course_title }}</option>
+					@endeach
+				</select>
+			</div>
+
+			<button type="submit" class="btn btn-dark rounded-0">Add Course</button>
+		</form>
+	</div>
+</div>
+
+@endsection

@@ -10,8 +10,10 @@
 		<p>You have no registered courses</p>
 	@endif
 
+	@include('includes.notification')
+	
 	<div class="mb-1">
-		<a href="{{ route('add-course', { id: course.id }) }}" class="btn btn-dark text-white rounded-0">
+		<a href="{{ route('add-course-form') }}" class="btn btn-dark text-white rounded-0">
 			Add Course
 		</a>
 	</div>

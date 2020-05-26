@@ -42,9 +42,9 @@ Route.group(() => {
 
 Route.group(() => {
 	Route.get('/courses/:id', 'StudentController.showAllCourses').as('all-student-courses')
-	Route.post('/course', 'StudentController.addCourse').as('add-course')
-	Route.get('/courses/:id', 'StudentController.getCourses')
-	Route.delete('/course/:id', 'StudentController.destroy').as('delete-course')
+	Route.get('/course', 'StudentController.showAddCourseForm').as('add-course-form')
+	Route.post('/course/:id', 'StudentController.addCourse').as('add-course')
+	Route.get('/course/:id', 'StudentController.destroy').as('delete-course')
 }).prefix('student').middleware(['auth', 'student'])
 
 Route.group(() => {

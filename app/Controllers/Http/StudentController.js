@@ -1,5 +1,6 @@
 'use strict'
 
+const { validateAll, validate } = use('Validator')
 const StudentsCourse = use('App/Models/StudentsCourse')
 const Department = use('App/Models/Department')
 const Course = use('App/Models/Course')
@@ -18,64 +19,71 @@ class StudentController {
 		return view.render('student.student-courses', { courses: courses.toJSON() })
 	}
 
-	async getCourses({ params, response }) {
-		try {
-			const { id } = params
+	async showAddCourseForm({ view }) {
+		const courses = await Course.all()
 
-			const courses = await User.find(id)
-
-			return courses.courses().fetch()
-
-			return response.json({
-				status: 'success',
-				data: courses
-			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Could not fetch courses.'
-			})
-		}
+		return view.render('student.add-student-course', { courses: courses.toJSON() })
 	}
 
-	// add a course
-	async addCourse({ request, response }) {
+	async addCourse({ request, response, params, session }) {
 		const rules = {
-			student_id: 'required|number',
 			course_id: 'required|number'
 		}
 
-		const validation = await validate(request.all(), rules)
+		const validation = await validateAll(request.all(), rules)
 
 		if (validation.fails()) {
-			return response.json({ message: validation.messages() })
+			session.withErrors(validation.messages()).flash()
+
+			return response.redirect('back')
 		}
 
-		const data = request.only(['student_id', 'course_id'])
+		const course = await new StudentsCourse()
+		course.student_id = params.id
+		course.course_id = request.input(['course_id'])
 
-		try {
-			// save to db
-			const course = await StudentsCourse.create(data)
-
-			return response.status(200).json({
-				status: 'course added',
+		if (await course.save()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Course Added!'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Failed to add course'
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Course Not Added'
+				}
 			})
+			return response.redirect('back')
 		}
 	}
+
 
 	// delete a course
 	async destroy({ params, response, session }) {
 		const { id } = params
 		const course = await StudentsCourse.find(id)
 
-		course.delete()
-
-
+		if (course.delete()) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Course Deleted!'
+				}
+			})
+			return response.redirect('back')
+		} else {
+			session.flash({
+				notification: {
+					type: 'error',
+					message: 'Failed to delete course!'
+				}
+			})
+			return response.redirect('back')
+		}
 	}
 }
 
