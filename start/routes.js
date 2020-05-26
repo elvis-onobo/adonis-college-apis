@@ -41,10 +41,11 @@ Route.group(() => {
 }).prefix('admin').middleware(['auth', 'admin'])
 
 Route.group(() => {
-	Route.post('/course', 'StudentController.addCourse')
+	Route.get('/courses/:id', 'StudentController.showAllCourses').as('all-student-courses')
+	Route.post('/course', 'StudentController.addCourse').as('add-course')
 	Route.get('/courses/:id', 'StudentController.getCourses')
-	Route.delete('/course/:id', 'StudentController.destroy')
-}).prefix('student').middleware(['auth:jwt', 'student'])
+	Route.delete('/course/:id', 'StudentController.destroy').as('delete-course')
+}).prefix('student').middleware(['auth', 'student'])
 
 Route.group(() => {
 	Route.put('/course/:id', 'HodController.courseIntructor')

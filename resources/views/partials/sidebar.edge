@@ -20,9 +20,6 @@
 											<a href="{{ route('users') }}" class="text-white">All Users</a>
                     </li>
                     <li>
-										<a href="" class="text-white">honbg</a>
-                    </li>
-                    <li>
                         <a href="#" class="text-white">Courses</a>
                     </li>
                 </ul>
@@ -31,10 +28,10 @@
               <a href="" class="text-white">Roles</a>
             </li>
             <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Pages</a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Students</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a href="#" class="text-white">Page 1</a>
+											<a href="{{ route('all-student-courses', { id: auth.user.id }) }}" class="text-white">Courses</a>
                     </li>
                     <li>
                         <a href="#" class="text-white">Page 2</a>

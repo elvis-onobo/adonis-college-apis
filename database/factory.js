@@ -23,7 +23,7 @@ Factory.blueprint('App/Models/User', async (faker) => {
 		street: faker.address(),
 		role_id: 1,
 		state_id: 2,
-		password: await Hash.make('password')
+		password: 'password'
 	}
 })
 
