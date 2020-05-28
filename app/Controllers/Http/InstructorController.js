@@ -4,27 +4,24 @@ const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 
 class InstructorController {
-	async courses({ params, auth, response }) {
-		try {
-			const { id } = params //instructorID
+	async courses({ params, auth, response, session, view }) {
+		const { id } = params //instructorID
 
-			if (auth.user.id !== Number(params.id)) {
-				return response.json({ status: 'You can only see courses assigned to you' })
-			}
-
-			const courses = await Course.findBy('instructor_id', id)
-
-			return response.json({
-				status: 'success',
-				data: courses
+		if (auth.user.id !== Number(params.id)) {
+			session.flash({
+				notification: {
+					type: 'success',
+					message: 'Instructor assigned to course'
+				}
 			})
-		} catch (error) {
-			return response.status(400).json({
-				status: 'error',
-				message: 'Could not fetch courses.'
-			})
+			return response.redirect('back')
 		}
 
+		const courses = await Course.query()
+			.where('instructor_id', id)
+			.fetch()
+
+		return view.render('instructor.all-courses', { courses: courses.toJSON() })
 	}
 }
 

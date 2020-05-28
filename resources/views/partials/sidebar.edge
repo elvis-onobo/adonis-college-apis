@@ -3,10 +3,12 @@
     <nav id="sidebar" style="width: 250px; position: fixed; left: 0; height: 100vh; z-index: 999; background: #7386D5; color: #fff; transition: all 0.3s;">
         <div class="card-body sidebar-header">
 				<h3>Hi {{ auth.user.firstname }}</h3>
-        </div>
+				</div>
+
 
         <ul class="card-body list-unstyled components">
-            <p>What Do You Want To Do?</p>
+						<p>What Do You Want To Do?</p>
+						@if(role.role_label === 'Admin') 
 						<li class="active">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Home</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -24,31 +26,36 @@
                     </li>
                 </ul>
 						</li>
+						@endif
 			      <li>
               <a href="" class="text-white">Roles</a>
-            </li>
+						</li>
+						@if(role.role_label === 'Student') 
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">Students</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
 											<a href="{{ route('all-student-courses', { id: auth.user.id }) }}" class="text-white">Courses</a>
                     </li>
+                </ul>
+						</li>
+						@endif
+						@if(role.role_label === 'HOD') 
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white">HODs</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a href="#" class="text-white">Page 2</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-white">Page 3</a>
+											<a href="{{ route('instructors') }}" class="text-white">Instructors</a>
                     </li>
                 </ul>
-            </li>
+						</li>
+						@endif
+						@if(role.role_label === 'Instructor') 
             <li>
-                <a href="#" class="text-white">Portfolio</a>
-            </li>
-            <li>
-                <a href="#" class="text-white">Contact</a>
-            </li>
+                <a href="{{ route('my-courses', {id: auth.user.id}) }}" class="text-white">Instructor</a>
+						</li>
+						@endif
         </ul>
-
 		</nav>
 		
     <!-- Page Content -->

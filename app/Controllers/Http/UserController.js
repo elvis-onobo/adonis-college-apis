@@ -121,7 +121,8 @@ class UserController {
 	/*
 	 *@ Homepage
 	 */
-	showHomePage({ view }) {
+	async showHomePage({ view }) {
+
 		return view.render('home')
 	}
 
@@ -342,52 +343,6 @@ class UserController {
 				notification: {
 					type: 'error',
 					message: 'Instructor not added'
-				}
-			})
-			return response.redirect('back')
-		}
-	}
-
-	/*
-	 * @ Assign an instructor to a course
-	 */
-	async showAddInstructorToCourseForm({ view, params }) {
-		const user = await User.find(params.id)
-		const courses = await Course.all()
-
-		return view.render('admin.add-instructor-course', { courses: courses.toJSON(), user: user.toJSON() })
-	}
-
-	async course({ request, response, params, session }) {
-		const rules = {
-			course_id: 'required|string'
-		}
-
-		const validation = await validateAll(request.all(), rules)
-
-		if (validation.fails()) {
-			session.withErrors(validation.messages()).flash()
-
-			return response.redirect('back')
-		}
-
-		const course = await Course.find(request.input('course_id'))
-
-		course.instructor_id = params.id
-
-		if (course.save()) {
-			session.flash({
-				notification: {
-					type: 'success',
-					message: 'Instructor assigned to course'
-				}
-			})
-			return response.redirect('back')
-		} else {
-			session.flash({
-				notification: {
-					type: 'error',
-					message: 'Instructor not assigned to course'
 				}
 			})
 			return response.redirect('back')

@@ -1,0 +1,42 @@
+@layout('layouts.main')
+
+@section('main')
+
+@include('partials.sidebar')
+
+<div class="row justify-content-center">
+	<div class="col-md-7 card-body">
+		@if(instructors.length < 1)
+			<p>You there are no other registered users</p>
+		@endif
+		
+		@include('includes.notification')
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">First Name</th>
+				<th scope="col">Last Name</th>
+				<th scope="col">Email</th>
+				<th scope="col">Role</th>
+			</tr>
+		</thead>
+		<tbody>
+			@each(ins in instructors)
+				<tr>
+					<td>{{ ins.firstname }}</td>
+					<td>{{ ins.lastname }}</td>
+					<td>{{ ins.email }}</td>
+				<td>
+					{{user}}
+					<a href="{{ route('add-instructor-to-course-form', { id: ins.user_id }) }}" class="btn btn-primary text-white rounded-0">Assign Course</a>
+				</td>
+				<td><a href="{{ route('delete-instructor', { id: ins.user_id }) }}" class="btn btn-danger text-white rounded-0">Delete</a></td>
+				</tr>
+			@endeach
+		</tbody>
+	</table>
+</div>
+
+</div>
+@endsection

@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Instructor extends Model {
 	users() {
-		return this.hasMany('App/Models/User')
+		return this.belongsToMany('App/Models/User', 'user_id')
 	}
 
 	departments() {

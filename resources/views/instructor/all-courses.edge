@@ -1,0 +1,30 @@
+@layout('layouts.main')
+
+@section('main')
+
+@include('partials.sidebar')
+
+<div class="row justify-content-center">
+	<div class="col-md-5 card-body">
+		@if(courses.length === 1)
+			<p>You have no assigned courses</p>
+		@endif
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Course</th>
+			</tr>
+		</thead>
+		<tbody>
+			@each(course in courses)
+				<tr>
+					<td>{{ course.course_title }}</td>
+				</tr>
+			@endeach
+		</tbody>
+	</table>
+</div>
+
+</div>
+@endsection

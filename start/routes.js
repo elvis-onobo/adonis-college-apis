@@ -35,8 +35,6 @@ Route.group(() => {
 	Route.post('/department', 'UserController.department')
 	Route.get('/instructor/:id', 'UserController.showAddUserAsIntructorForm').as('add-user-as-instructor-form')
 	Route.post('/instructors/:id', 'UserController.instructor').as('add-instructor-to-dep')
-	Route.get('/course/:id', 'UserController.showAddInstructorToCourseForm').as('add-instructor-to-course-form')
-	Route.post('/courses/:id', 'UserController.course').as('add-instructor-to-course')
 	Route.get('/users/delete/:id', 'UserController.deleteUser').as('delete-user')
 }).prefix('admin').middleware(['auth', 'admin'])
 
@@ -48,13 +46,15 @@ Route.group(() => {
 }).prefix('student').middleware(['auth', 'student'])
 
 Route.group(() => {
-	Route.put('/course/:id', 'HodController.courseIntructor')
-	Route.delete('/instructor/:id', 'HodController.destroyInstructor')
-}).prefix('hod').middleware(['auth:jwt', 'hod'])
+	Route.get('/course', 'HodController.getAllInstructors').as('instructors')
+	Route.get('/course/:id', 'HodController.showAddInstructorToCourseForm').as('add-instructor-to-course-form')
+	Route.post('/courses/:id', 'HodController.course').as('add-instructor-to-course')
+	Route.get('/instructor/:id', 'HodController.destroyInstructor').as('delete-instructor')
+}).prefix('hod').middleware(['auth', 'hod'])
 
 Route.group(() => {
-	Route.get('/course/:id', 'InstructorController.courses')
-}).prefix('instructor').middleware(['auth:jwt', 'instructor'])
+	Route.get('/course/:id', 'InstructorController.courses').as('my-courses')
+}).prefix('instructor').middleware(['auth', 'instructor'])
 
 // Logout User
 Route.get('/logout', 'UserController.logoutUser').as('logoutUser')
