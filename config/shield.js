@@ -10,7 +10,7 @@ module.exports = {
   | and load resources like scripts, styles and fonts. There are wide
   | variety of options to choose from.
   */
-  csp: {
+	csp: {
     /*
     |--------------------------------------------------------------------------
     | Directives
@@ -27,8 +27,8 @@ module.exports = {
     | }
     |
     */
-    directives: {
-    },
+		directives: {
+		},
     /*
     |--------------------------------------------------------------------------
     | Report only
@@ -38,7 +38,7 @@ module.exports = {
     | instead report them to a URL.
     |
     */
-    reportOnly: false,
+		reportOnly: false,
     /*
     |--------------------------------------------------------------------------
     | Set all headers
@@ -49,7 +49,7 @@ module.exports = {
     | headers, unless you want them to be set.
     |
     */
-    setAllHeaders: false,
+		setAllHeaders: false,
 
     /*
     |--------------------------------------------------------------------------
@@ -64,8 +64,8 @@ module.exports = {
     | if you want to know the behavior. https://github.com/helmetjs/helmet/pull/82
     |
     */
-    disableAndroid: true
-  },
+		disableAndroid: true
+	},
 
   /*
   |--------------------------------------------------------------------------
@@ -78,10 +78,10 @@ module.exports = {
   | Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
   |
   */
-  xss: {
-    enabled: true,
-    enableOnOldIE: false
-  },
+	xss: {
+		enabled: true,
+		enableOnOldIE: false
+	},
 
   /*
   |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ module.exports = {
   |
   | Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   */
-  xframe: 'DENY',
+	xframe: 'DENY',
 
   /*
   |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ module.exports = {
   | Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   |
   */
-  nosniff: true,
+	nosniff: true,
 
   /*
   |--------------------------------------------------------------------------
@@ -120,7 +120,7 @@ module.exports = {
   | a serious security risk. Below option will manage this for you.
   |
   */
-  noopen: true,
+	noopen: true,
 
   /*
   |--------------------------------------------------------------------------
@@ -131,15 +131,15 @@ module.exports = {
   | routes does have a valid token to execute an action.
   |
   */
-  csrf: {
-    enable: true,
-    methods: ['POST', 'PUT', 'DELETE'],
-    filterUris: [],
-    cookieOptions: {
-      httpOnly: false,
-      sameSite: true,
-      path: '/',
-      maxAge: 7200
-    }
-  }
+	csrf: {
+		enable: process.env.NODE_ENV === 'testing' ? false : true,
+		methods: ['POST', 'PUT', 'DELETE'],
+		filterUris: [],
+		cookieOptions: {
+			httpOnly: false,
+			sameSite: true,
+			path: '/',
+			maxAge: 7200
+		}
+	}
 }

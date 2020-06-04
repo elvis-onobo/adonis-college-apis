@@ -17,15 +17,15 @@
 const Route = use('Route')
 
 // views
-Route.on('/').render('signup').middleware('guest')
-Route.on('/login').render('login').middleware('guest')
-Route.on('/home').render('home')
+// Route.on('/').render('signup').middleware('guest')
+// Route.on('/login').render('login').middleware('guest')
+// Route.on('/home').render('home').as('home')//.middleware('auth')
 
 // middlewares: admin, student, instructor, hod
 // student(2), instructor(3) or HOD(4)
 Route.post('/signup', 'UserController.signup').as('signup')
 Route.post('/login', 'UserController.login').as('login')
-Route.get('/profile/:id', 'UserController.profile').middleware(['auth:jwt'])
+Route.get('/profile/:id', 'UserController.profile')//.middleware(['auth:jwt'])
 
 Route.group(() => {
 	Route.put('/update-user/:id', 'UserController.updateUser')

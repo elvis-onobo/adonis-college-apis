@@ -4,23 +4,9 @@ const Department = use('App/Models/Department')
 const Instructor = use('App/Models/Instructor')
 const Course = use('App/Models/Course')
 const User = use('App/Models/User')
-const { validate } = use('Validator')
+const { validate, validateAll } = use('Validator')
 
 class UserController {
-	// reusable methods
-	sendError(errorMessage) {
-		return response.status(400).json({
-			status: 'error',
-			message: errorMessage
-		})
-	}
-
-	sendSuccess(responseData) {
-		return response.json({
-			status: 'success',
-			data: responseData
-		})
-	}
 
 	// signs up the user
 	async signup({ request, auth, response }) {
@@ -28,7 +14,7 @@ class UserController {
 			firstname: 'required|string',
 			lastname: 'required|string',
 			email: 'required|email|unique:users,email',
-			password: 'required|confirmed'
+			password: 'required'
 		}
 
 		const validation = await validate(request.all(), rules)
@@ -46,7 +32,7 @@ class UserController {
 			// if user saved generate token for user
 			const token = await auth.generate(user)
 
-			return response.json({
+			return response.status(200).json({
 				status: 'success',
 				data: token
 			})
@@ -73,6 +59,7 @@ class UserController {
 		}
 
 		try {
+
 			// validate the user credentials and generate JWT token
 			const token = await auth.attempt(
 				request.input('email'),
