@@ -80,9 +80,12 @@ class UserController {
 
 	// users can view their profile
 	async profile({ auth, params, response }) {
-		if (auth.user.id !== Number(params.id)) {
+		const { id } = await auth.getUser()
+
+		if (id !== Number(params.id)) {
 			return response.json({ status: 'You cannot view another user\'s profile' })
 		}
+
 		return response.json({
 			data: auth.user
 		})
